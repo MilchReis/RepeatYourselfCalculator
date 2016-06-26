@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Repeat-Yourself-Calculator</title>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="js/jquery-2.2.4.min.js"></script>
+    <script src="js/angular.1.5.7.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/lang.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body>
+    <div ng-app="rycApp" ng-controller="RYCController" ng-cloak>
+    <form class="form-horizontal">
+    <fieldset>
+
+    <!-- Form Name -->
+    <legend>{{ln("YOUR_CALCULATION")}}</legend>
+    <div class="dropdown languageSwitch">
+     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Language
+     <span class="caret"></span></button>
+     <ul class="dropdown-menu">
+       <li ng-click="switchLang('en')"><a href="#">English</a></li>
+       <li ng-click="switchLang('de')"><a href="#">Deutsch</a></li>
+     </ul>
+    </div>
+
+    <!-- Button Drop Down -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="buttondropdown">{{ln("DURATION_INPT")}}</label>
+      <div class="col-md-4">
+        <div class="input-group">
+          <input name="buttondropdown" class="form-control" placeholder="5" required="" type="text" ng-model="duration.value">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ln("UNIT")}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              <li ng-click="duration.unit = 'mins'"><a href="#">{{ln("MINS")}}</a></li>
+              <li ng-click="duration.unit = 'hours'"><a href="#">{{ln("HOURS")}}</a></li>
+              <li ng-click="duration.unit = 'days'"><a href="#">{{ln("DAYS")}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <span class="help-block">in {{getReadableUnit(duration)}}</span>
+      </div>
+    </div>
+
+    <!-- Button Drop Down -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="buttondropdown">{{ln("FREQUENCY_INPT")}}</label>
+      <div class="col-md-4">
+        <div class="input-group">
+          <input name="buttondropdown" class="form-control" placeholder="2" required="" type="text" ng-model="frequency.value">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ln("UNIT")}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              <li ng-click="frequency.unit = 'days'"><a href="#">{{ln("DAY_PER")}}</a></li>
+              <li ng-click="frequency.unit = 'months'"><a href="#">{{ln("MONTH_PER")}}</a></li>
+              <li ng-click="frequency.unit = 'years'"><a href="#">{{ln("YEAR_PER")}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <span class="help-block">in {{getReadableUnit(frequency)}}</span>
+      </div>
+    </div>
+
+    <!-- Button Drop Down -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="buttondropdown">{{ln("TOTAL_INPT")}}</label>
+      <div class="col-md-4">
+        <div class="input-group">
+          <input name="buttondropdown" class="form-control" placeholder="2" required="" type="text" ng-model="totalDuration.value">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ln("UNIT")}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              <li ng-click="totalDuration.unit = 'days'"><a href="#">{{ln("DAYS")}}</a></li>
+              <li ng-click="totalDuration.unit = 'weeks'"><a href="#">{{ln("WEEKS")}}</a></li>
+              <li ng-click="totalDuration.unit = 'months'"><a href="#">{{ln("MONTHS")}}</a></li>
+              <li ng-click="totalDuration.unit = 'years'"><a href="#">{{ln("YEARS")}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <span class="help-block">in {{getReadableUnit(totalDuration)}}</span>
+      </div>
+    </div>
+
+    <!-- Button Drop Down -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="buttondropdown">{{ln("AUTOMATION_INPT")}}</label>
+      <div class="col-md-4">
+        <div class="input-group">
+          <input name="buttondropdown" class="form-control" placeholder="16" type="text" ng-model="automationDuration.value">
+          <div class="input-group-btn">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ln("UNIT")}}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+              <li ng-click="automationDuration.unit = 'hours'"><a href="#">{{ln("HOURS")}}</a></li>
+              <li ng-click="automationDuration.unit = 'days'"><a href="#">{{ln("DAY_WORK")}}</a></li>
+              <li ng-click="automationDuration.unit = 'weeks'"><a href="#">{{ln("WEEK_WORK")}}</a></li>
+            </ul>
+          </div>
+        </div>
+        <span class="help-block">in {{getReadableUnit(automationDuration)}}</span>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="singlebutton"></label>
+      <div class="col-md-4">
+        <button name="singlebutton" class="btn btn-primary" ng-click="calculate()">{{ln("START_CALC")}}</button>
+      </div>
+    </div>
+
+    <div ng-show="result.value" style="margin: 0px auto;">
+      <div class="resultBox totalManuelly">
+        <p>{{ln("TOTAL_INPT")}}</p>
+        <p>{{result.value}} in {{getReadableUnit(result)}}</p>
+      </div>
+
+      <div ng-show="automationDuration.value" class="resultBox totalAutomatic">
+        <p>{{ln("AUTOMATION_INPT")}}</p>
+        <p>{{automationDuration.value}} in {{getReadableUnit(automationDuration)}}</p>
+      </div>
+    </div>
+
+    </fieldset>
+    </form>
+
+    </div>
+
+    <hr />
+    <p><small>by <a href="https://github.com/milchreis">milchreis</a></small></p>
+
+  </body>
+</html>
