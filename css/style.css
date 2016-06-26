@@ -1,0 +1,26 @@
+body {
+  max-width: 90%;
+  margin: 10px auto;
+}
+
+.form-group {
+    margin-bottom: -10px;
+}
+.languageSwitch {
+    position: absolute;
+    margin-top: -58px;
+    right: 5%;
+}
+
+.resultBox {
+    width: 30%;
+    background-color: rgb(221, 221, 221);
+    padding: 10px;
+    border-radius: 3px;
+    float: left;
+    margin: 10px;
+}
+
+.success {
+  background-color: #DFF0D8;
+}
